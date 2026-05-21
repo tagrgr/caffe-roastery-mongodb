@@ -842,3 +842,8 @@ db.rawBeans.aggregate([
     }
 
 ]);
+
+// Final checks - confirming documents were inserted
+print("Suppliers:", db.suppliers.countDocuments());
+print("Raw Beans:", db.rawBeans.countDocuments());
+print("Products:", db.products.countDocuments());
