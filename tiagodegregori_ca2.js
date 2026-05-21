@@ -702,3 +702,80 @@ db.products.insertMany([
         ]
     }
 ])
+
+// 3.3 Find Queries - find active products with a unit price greater than 20
+db.products.find(
+    {
+        isActive: true,
+        unitPrice: {
+            $gt: 20
+        }
+    },
+    {
+        productName: 1,
+        roastLevel: 1,
+        unitPrice: 1,
+        _id: 0
+    }
+);
+
+
+// 3.3 Find Queries - find raw beans from selected origin countries
+db.rawBeans.find(
+    {
+        originCountry: {
+            $in: ["Colombia", "Brazil", "Ethiopia"]
+        }
+    },
+    {
+        beanName: 1,
+        originCountry: 1,
+        stockQty: 1,
+        _id: 0
+    }
+);
+
+
+// 3.3 Find Queries - find products that use Brazil Santos with at least 40 percent quantity
+db.products.find(
+    {
+        beans: {
+            $elemMatch: {
+                beanName: "Brazil Santos",
+                qtyUsed: {
+                    $gte: 40
+                }
+            }
+        }
+    },
+    {
+        productName: 1,
+        beans: 1,
+        _id: 0
+    }
+);
+
+
+// 3.3 Find Queries - find low stock beans and sort by stock quantity
+db.rawBeans.find(
+    {
+        stockQty: {
+            $lte: 180
+        }
+    },
+    {
+        beanName: 1,
+        originCountry: 1,
+        stockQty: 1,
+        _id: 0
+    }
+).sort({
+    stockQty: 1
+});
+
+
+// 3.3 Find Queries - count active medium roast products
+db.products.countDocuments({
+    isActive: true,
+    roastLevel: "Medium"
+});
