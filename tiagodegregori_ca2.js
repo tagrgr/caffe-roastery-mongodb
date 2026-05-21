@@ -779,3 +779,66 @@ db.products.countDocuments({
     isActive: true,
     roastLevel: "Medium"
 });
+
+// 3.4 Aggregations - calculate total bean usage across all products
+db.products.aggregate([
+
+    {
+        $unwind: "$beans"
+    },
+
+    {
+        $group: {
+            _id: "$beans.beanName",
+            totalQtyUsed: {
+                $sum: "$beans.qtyUsed"
+            },
+            numberOfProductsUsedIn: {
+                $sum: 1
+            }
+        }
+    },
+
+    {
+        $sort: {
+            totalQtyUsed: -1
+        }
+    }
+
+]);
+
+
+// 3.4 Aggregations - show raw beans with their supplier details
+db.rawBeans.aggregate([
+
+    {
+        $lookup: {
+            from: "suppliers",
+            localField: "supplierId",
+            foreignField: "_id",
+            as: "supplierDetails"
+        }
+    },
+
+    {
+        $unwind: "$supplierDetails"
+    },
+
+    {
+        $project: {
+            _id: 0,
+            beanName: 1,
+            originCountry: 1,
+            stockQty: 1,
+            supplierName: "$supplierDetails.supplierName",
+            supplierCounty: "$supplierDetails.address.county"
+        }
+    },
+
+    {
+        $sort: {
+            supplierName: 1
+        }
+    }
+
+]);
