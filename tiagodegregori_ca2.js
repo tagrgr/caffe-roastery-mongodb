@@ -780,7 +780,7 @@ db.products.countDocuments({
     roastLevel: "Medium"
 });
 
-// 3.4 Aggregations - calculate total bean usage across all products
+// 3.4 Aggregations to calculate total bean usage across all products
 db.products.aggregate([
 
     {
@@ -808,7 +808,7 @@ db.products.aggregate([
 ]);
 
 
-// 3.4 Aggregations - show raw beans with their supplier details
+// 3.4 Aggregations using $lookup to combine raw beans with their supplier details
 db.rawBeans.aggregate([
 
     {
